@@ -112,6 +112,7 @@ MIDDLEWARE_CLASSES = (
     'api_boilerplate.middleware.ApiDjangoAuthMiddleware',
     'api_boilerplate.middleware.ApiHttpBasicAuthMiddleware',
     'api_boilerplate.middleware.ApiKeyAuthMiddleware',
+    'api_boilerplate.middleware.ApiRequestDataMiddleware',
 )
 
 ROOT_URLCONF = 'example.urls'

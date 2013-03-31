@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url
 from example.api.views import *
 
 urlpatterns = patterns('api.views',
+    url(r'^echo/?$', EchoView.as_view(), name='api_echo'),
     url(r'^account/?$', AccountView.as_view(), name='api_account'),
     
     url(r'^users/?$', UsersView.as_view(), name='api_users'),

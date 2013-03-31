@@ -32,6 +32,36 @@ def _get_user(request, user_id):
     return user
 
 
+class EchoView(ApiView):
+    '''
+    Echo view
+    
+    Endpoint:
+        /api/echo/
+    
+    Attributes:
+        None
+    Parameters:
+        None
+    
+    Visibility
+        Public
+    '''
+    
+    def get(self, request, *args, **kwargs):
+        return JSONResponse(request, "POST/PUT/PATCH data to echo.")
+    
+    def patch(self, request, *args, **kwargs):
+        return JSONResponse(request, request.data)
+    
+    def put(self, request, *args, **kwargs):
+        return JSONResponse(request, request.data)
+    
+    def post(self, request, *args, **kwargs):
+        return JSONResponse(request, request.data)
+
+
+
 class AccountView(ApiView):
     '''
     Account view
