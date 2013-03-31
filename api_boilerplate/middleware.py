@@ -129,7 +129,7 @@ class ApiRequestDataMiddleware:
         # JSON
         if REQUEST_JSON:
             try:
-                data = json.loads(request.raw_post_data)
+                data = json.loads(request.body)
             except ValueError:
                 data = None
         
