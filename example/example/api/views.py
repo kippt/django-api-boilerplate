@@ -1,6 +1,5 @@
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
-from annoying.functions import get_object_or_None
 
 from api_boilerplate.http import ApiView, JSONResponse, JSONResponseNotFound
 from api_boilerplate.pagination import Paginator
@@ -20,10 +19,16 @@ def _get_user(request, user_id):
         user = request.user
     # /api/users/1/
     elif user_id.isdigit():
-        user = get_object_or_None(User, is_active=True, pk=user_id)
+        try:
+            user = User.objects.get(is_active=True, pk=user_id)
+        except User.DoesNotExist:
+            user = None
     # /api/users/jorilallo/
     else:
-        user = get_object_or_None(User, is_active=True, username__iexact=user_id)
+        try:
+            user = User.objects.get(is_active=True, username__iexact=user_id)
+        except User.DoesNotExist:
+            user = None
     return user
 
 

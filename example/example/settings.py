@@ -15,7 +15,7 @@ except ImportError:
 
 MANAGERS = ADMINS
 
-SITE_NAME = 'example.com'
+SITE_NAME = 'example'
 
 DATABASES = {
     'default': {

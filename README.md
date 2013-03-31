@@ -24,6 +24,15 @@ _Default: api_boilerplate.models.ApiKey_
 
 _Default: 20_
 
+### API_AUTH_CASE_INSENSITIVE
+
+_Default: False_
+
+### API_AUTH_EMAIL_AS_USERNAME
+
+_Default: False_
+
+
 ## Common best practices
 
 - Use _api()_ method for resource Models to return a Python object. Responses will convert that into JSON. This will make caching easier as well.
@@ -32,7 +41,6 @@ _Default: 20_
 
 - Docs all the things
 - Better name
-- Remove django-annoying 
 - Test all the things
 - Include ``resource_uri`` to  201 request
 - Better JSONP responses

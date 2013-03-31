@@ -2,13 +2,37 @@ import base64
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db.models.loading import get_model
-from annoying.functions import get_object_or_None
 
 from api_boilerplate.http import JSONResponseUnauthorized, JSONResponseBadRequest
+
+AUTH_CASE_INSENSITIVE = getattr(settings, 'API_AUTH_CASE_INSENSITIVE', False)
+
+AUTH_EMAIL_AS_USERNAME = getattr(settings, 'API_AUTH_EMAIL_AS_USERNAME', False)
 
 API_KEY_MODEL = getattr(settings, 'API_KEY_MODEL',
     'api_boilerplate.models.ApiKey')
 ApiKey = get_model(*API_KEY_MODEL.split('.',1))
+
+def _get_user(username):
+    try:
+        if AUTH_CASE_INSENSITIVE:
+            user = User.objects.get(username__iexact=username)
+        else:
+            user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        user = None
+    
+    if AUTH_EMAIL_AS_USERNAME:
+        if not user:
+            try:
+                if AUTH_CASE_INSENSITIVE:
+                    user = User.objects.get(email__iexact=username)
+                else:
+                    user = User.objects.get(email=username)
+            except User.DoesNotExist:
+                user = None
+    
+    return user
 
 class ApiDjangoAuthMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
@@ -42,17 +66,16 @@ class ApiHttpBasicAuthMiddleware:
             if len(bits) != 2:
                 return JSONResponseUnauthorized(request, 'Invalid Authorization header. Value should be "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==" where base64 encoded part is encrypted from "username:password"')
 
-            try:
-                # Get user by username or email
-                user = get_object_or_None(User, username__iexact=bits[0])
-                if not user:
-                    user = get_object_or_None(User, email__iexact=bits[0])
-                
-                if user.check_password(bits[1]):
-                    request.user = user
-                else:
-                    return JSONResponseUnauthorized(request, 'Username and password don\'t match')
-            except:
+            
+            # Get user by username or email
+            username = bits[0]
+            user = _get_user(username)
+            if user == None:
+                return JSONResponseUnauthorized(request, 'User and password don\'t match')
+            
+            if user.check_password(bits[1]):
+                request.user = user
+            else:
                 return JSONResponseUnauthorized(request, 'Username and password don\'t match')
             
             request.user = user
@@ -64,19 +87,15 @@ class ApiKeyAuthMiddleware:
         Middleware for API authentication. Partly forked form django-tastypie
         """
         # ApiKey Auth
-        username = request.META.get('HTTP_X_KIPPT_USERNAME', None)
-        api_key = request.META.get('HTTP_X_KIPPT_API_TOKEN', None)
+        username = request.META.get('HTTP_X_%s_USERNAME' % (settings.SITE_NAME.upper()), None) 
+        api_key = request.META.get('HTTP_X_%s_API_TOKEN' % (settings.SITE_NAME.upper()), None)
 
         if username and api_key:
             '''
             Handles API key auth, in which a user provides a username & API key.
             '''
-            try:
-                # Get user by username or email
-                user = get_object_or_None(User, username__iexact=username)
-                if not user:
-                    user = get_object_or_None(User, email__iexact=username)
-            except (User.DoesNotExist, User.MultipleObjectsReturned):
+            user = _get_user(username)
+            if user == None:
                 return JSONResponseUnauthorized(request, 'Can\'t find an user with this username and api_key')
 
             try:
