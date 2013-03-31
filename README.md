@@ -12,7 +12,7 @@ This project is meant to provide the basics for people to create well behaving A
 
 Most of this code is extracted from [Kippt's](kippt.com/) API ([documentation on Github](https://github.com/kippt/api-documentation/)). It's designed to be as easy as possible to consume, mainly meaning simple authentication (browser session) and JSON output. This makes API debugging extremely easy with Chrome's JSONView and Postman extensions. You should also be using [requests](https://github.com/kennethreitz/requests).
 
-Some of the code in this project is heavily influenced by or forked from django-tastypie and the of Leah Culver and Eric Florensanzo.
+Some of the code in this project is influenced by or forked from awesome [django-tastypie](https://github.com/toastdriven/django-tastypie). HTTP responses are created based on work of [Leah Culver](https://github.com/leah) and [Eric Florenzano](https://github.com/ericflo).
 
 ## Settings
 
