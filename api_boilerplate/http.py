@@ -15,11 +15,14 @@ class JSONResponse(HttpResponse):
         indent = 2 if (settings.DEBUG or request.GET.get('prettify')) else None
         mime = "text/javascript" if settings.DEBUG else "application/json"
         content = json.dumps(data, indent=indent)
+        
+        # JSONP
         callback = request.GET.get('callback')
         if callback:
             # verify that the callback is only letters, numbers, periods, and underscores
             if re.compile(r'^[a-zA-Z][\w.]*$').match(callback):
                 content = '%s(%s);' % (callback, content)
+        
         super(JSONResponse, self).__init__(
             content = content,
             mimetype = mime,
