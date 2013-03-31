@@ -12,7 +12,7 @@ logger = logging.getLogger('django.request')
 
 class JSONResponse(HttpResponse):
     def __init__(self, request, data):
-        indent = 2 if settings.DEBUG else None
+        indent = 2 if (settings.DEBUG or request.GET.get('prettify')) else None
         mime = "text/javascript" if settings.DEBUG else "application/json"
         content = json.dumps(data, indent=indent)
         callback = request.GET.get('callback')

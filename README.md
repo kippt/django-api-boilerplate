@@ -39,5 +39,4 @@ _Default: 20_
     - Always return 200
     - Include ``status_code`` and errors to response
 - Rate limiting (Cache/Redis based)
-- Pretty print attribute
 - Data parsing from both POST/GET parameters and JSON at the same time
