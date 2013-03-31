@@ -6,7 +6,7 @@ from api_boilerplate.pagination import Paginator
 from api_boilerplate.decorators import api_login_required
 from api_boilerplate.exceptions import ApiBadRequestException
 
-from example.api.models import UserProfile
+from example.accounts.models import UserProfile
 
 
 def _get_user(request, user_id):
