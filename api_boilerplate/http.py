@@ -29,9 +29,11 @@ class JSONResponse(HttpResponse):
         )
 
 class JSONResponseCreated(JSONResponse):
-    # TODO: Add location
-    def __init__(self, request, data):
+    status_code = 201
+    
+    def __init__(self, request, data, location):
         super(JSONResponse, self).__init__(request, data)
+        self['Location'] = location
 
 class JSONResponseNoContent(JSONResponse):
     status_code = 204

@@ -45,7 +45,6 @@ _Default: True_
 - Docs all the things
 - Better name
 - Test all the things
-- Include ``resource_uri`` to  201 request
 - Better JSONP responses
     - Always return 200
     - Include ``status_code`` and errors to response
