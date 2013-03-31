@@ -1,10 +1,14 @@
 import base64
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db.models.loading import get_model
 from annoying.functions import get_object_or_None
 
-from api_boilerplate.models import ApiKey
 from api_boilerplate.http import JSONResponseUnauthorized, JSONResponseBadRequest
+
+API_KEY_MODEL = getattr(settings, 'API_KEY_MODEL',
+    'api_boilerplate.models.ApiKey')
+ApiKey = get_model(*API_KEY_MODEL.split('.',1))
 
 class ApiDjangoAuthMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
