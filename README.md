@@ -30,6 +30,7 @@ _Default: 20_
 
 ## Todo
 
+- Docs all the things
 - Better name
 - Remove django-annoying 
 - Test all the things
