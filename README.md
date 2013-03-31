@@ -45,7 +45,7 @@ _Default: True_
 - Docs all the things
 - Better name
 - Test all the things
-- Better JSONP responses
-    - Always return 200
-    - Include ``status_code`` and errors to response
+- JSONP and errors
+    - Better way of handling error messages
+    - Have a separate field for error messages in JSONP response
 - Rate limiting (Cache/Redis based)

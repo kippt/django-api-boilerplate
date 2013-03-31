@@ -18,10 +18,15 @@ class JSONResponse(HttpResponse):
         
         # JSONP
         callback = request.GET.get('callback')
-        if callback:
-            # verify that the callback is only letters, numbers, periods, and underscores
-            if re.compile(r'^[a-zA-Z][\w.]*$').match(callback):
-                content = '%s(%s);' % (callback, content)
+        # verify that the callback is only letters, numbers, periods, and underscores
+        if callback and re.compile(r'^[a-zA-Z][\w.]*$').match(callback):
+            # Always return 200 with real status code in content
+            self.status_code = 200
+            content = {
+                'data': content,
+                'status_code': self.status_code,
+            }
+            content = '%s(%s);' % (callback, content)
         
         super(JSONResponse, self).__init__(
             content = content,
