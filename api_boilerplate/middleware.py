@@ -1,9 +1,13 @@
 import base64
+import json
+
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db.models.loading import get_model
 
 from api_boilerplate.http import JSONResponseUnauthorized, JSONResponseBadRequest
+
+### Settings
 
 AUTH_CASE_INSENSITIVE = getattr(settings, 'API_AUTH_CASE_INSENSITIVE', False)
 
@@ -12,6 +16,10 @@ AUTH_EMAIL_AS_USERNAME = getattr(settings, 'API_AUTH_EMAIL_AS_USERNAME', False)
 API_KEY_MODEL = getattr(settings, 'API_KEY_MODEL',
     'api_boilerplate.models.ApiKey')
 ApiKey = get_model(*API_KEY_MODEL.split('.',1))
+
+REQUEST_JSON = getattr(settings, 'API_REQUEST_JSON', True)
+
+### Helper functions
 
 def _get_user(username):
     try:
@@ -33,6 +41,8 @@ def _get_user(username):
                 user = None
     
     return user
+
+### Authentication middlewares
 
 class ApiDjangoAuthMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
@@ -105,3 +115,29 @@ class ApiKeyAuthMiddleware:
 
             request.user = user
             return
+
+### Request middlewares
+
+class ApiRequestDataMiddleware:
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        """
+        Middleware for parsing POST/PUT/PATCH data.
+        
+        Parses POST data into request.data. Optionally parses JSON from raw content as well (default=True).
+        """
+        
+        # JSON
+        if REQUEST_JSON:
+            try:
+                data = json.loads(request.raw_post_data)
+            except ValueError:
+                data = None
+        
+        # POST
+        if request.method == 'POST' and request.POST.keys():
+            data = {}
+            for key in request.POST.keys():
+                data[key] = request.POST[key]
+        
+        request.data = data
+        return

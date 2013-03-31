@@ -32,6 +32,9 @@ _Default: False_
 
 _Default: False_
 
+### API_REQUEST_JSON
+
+_Default: True_
 
 ## Common best practices
 
@@ -47,4 +50,3 @@ _Default: False_
     - Always return 200
     - Include ``status_code`` and errors to response
 - Rate limiting (Cache/Redis based)
-- Data parsing from both POST/GET parameters and JSON at the same time
