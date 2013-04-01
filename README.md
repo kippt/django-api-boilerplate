@@ -45,6 +45,7 @@ _Default: True_
 - Docs all the things
 - Better name
 - Test all the things
+- Separation for /api/ url (usually the redirect for docs)
 - JSONP and errors
     - Better way of handling error messages
     - Have a separate field for error messages in JSONP response
