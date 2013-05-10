@@ -37,7 +37,7 @@ class JSONResponseCreated(JSONResponse):
     status_code = 201
     
     def __init__(self, request, data, location):
-        super(JSONResponse, self).__init__(request, data)
+        super(JSONResponseCreated, self).__init__(request, data)
         self['Location'] = location
 
 class JSONResponseNoContent(JSONResponse):
