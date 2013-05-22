@@ -50,6 +50,11 @@ class ApiDjangoAuthMiddleware:
         Django session auth
         
         Authenticates logged in users. Handy for quick debugging or extensions.
+        
+        Note: Only allows CSRF safe methods. See Django's CSRF AJAX documentation for including tokens to requests:
+        
+            https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
+        
         """
         if request.user.is_authenticated():
             return None

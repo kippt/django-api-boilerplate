@@ -97,7 +97,6 @@ class ApiView(View):
         )
         return JSONResponseMethodNotAllowed(request)
     
-    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         # Try to dispatch to the right method; if a method doesn't exist,
         # defer to the error handler. Also defer to the error handler if the
