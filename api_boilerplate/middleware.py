@@ -4,6 +4,7 @@ import json
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db.models.loading import get_model
+from django.middleware.csrf import get_token
 
 from api_boilerplate.http import JSONResponseUnauthorized, JSONResponseBadRequest
 
@@ -48,15 +49,17 @@ class ApiDjangoAuthMiddleware:
     def process_view(self, request, view_func, view_args, view_kwargs):
         """
         Django session auth
-        
+
         Authenticates logged in users. Handy for quick debugging or extensions.
-        
+
         Note: Only allows CSRF safe methods. See Django's CSRF AJAX documentation for including tokens to requests:
-        
+
             https://docs.djangoproject.com/en/dev/ref/contrib/csrf/#ajax
-        
+
         """
         if request.user.is_authenticated():
+            # Always set CSRF token (not set by default unless templatetag or ensure_csrf_cookie decorator is used)
+            get_token(request)
             return None
 
 class ApiHttpBasicAuthMiddleware:
